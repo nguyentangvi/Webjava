@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{/layout/index :: dynamic(~{::main})}">
+<meta charset="UTF-8" />
+
+
+<body>
+	<main class="row">
+		<div th:each="p:${productPage.content}" class="col-sm-4">
+			<div class="panel panel-primary poly-item text-center">
+				<div class="panel-heading" style="height: 60px">
+					<div class="panel-title">
+						<p th:utext="${p.name}"></p>
+						<p th:if="${p.discount>0}" style="text-align: left;"
+							th:utext="${'-'+p.discount+'%'}"></p>
+
+					</div>
+
+				</div>
+				<div class="panel-body">
+					<a th:href="@{|/product/detail/${p.id}|}"> <img
+						th:src="@{|/assets/images/${p.image}|}">
+					</a>
+				</div>
+				<div class="panel-footer text-right">
+					<b class="pull-left"> <del th:if="${p.discount>0}">
+							[[${#numbers.formatDecimal(p.price,0,'COMMA', 0, 'POINT')}]]₫</del>
+						[[${#numbers.formatDecimal(p.price*(1-p.discount*0.01),0, 'COMMA',
+						0, 'POINT')}]]₫
+					</b>
+					<button th:attr="ng-click=@{|cart.add(${p.id})|}"
+						class="btn btn-success">
+						<i class="glyphicon glyphicon-shopping-cart"></i>
+					</button>
+				</div>
+			</div>
+
+
+		</div>
+		<div class="col">
+			<th:block th:if="${categorypage==null}">
+				<nav aria-label="Page navigation example"
+					th:if="${productPage.totalPages>0}">
+					<ul class="store-pagination">
+						<li
+							th:class="${1==productPage.number+1}?'page-item active':'page-item'">
+							<a class="page-link"
+							th:href="@{/product/list/page(name=${name},size=${productPage.size},page=${1})}"
+							aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+						</a>
+						</li>
+						<th:block th:if="${productPage.number>0}">
+							<li><a
+								th:href="@{/product/list/page(name=${name}, size =${productPage.size}, page=${productPage.number})}"><i
+									class="fa fa-angle-left"></i></a></li>
+
+						</th:block>
+
+						<li class="page-item"><p>
+								<span th:utext="${productPage.number + 1}"></span>/<span
+									th:utext="${productPage.totalPages}"></span>
+							</p></li>
+
+
+						<th:block th:if="${productPage.number<productPage.totalPages-1}">
+							<li><a
+								th:href="@{/product/list/page(name=${name}, size =${productPage.size}, page=${productPage.number+2})}"><i
+									class="fa fa-angle-right"></i></a></li>
+
+						</th:block>
+						<li
+							th:class="${productPage.totalPages==productPage.number+1}?'page-item active':'page-item'">
+							<a class="page-link"
+							th:href="@{/product/list/page(name=${name},size=${productPage.size},page=${productPage.totalPages})}"
+							aria-label="Next"> <span>&raquo;</span>
+						</a>
+						</li>
+
+					</ul>
+				</nav>
+		</div>
+		</th:block>
+
+		<th:block th:if="${categorypage!=null}">
+			<nav aria-label="Page navigation example"
+				th:if="${productPage.totalPages>0}">
+				<ul class="store-pagination">
+					<li
+						th:class="${1==productPage.number+1}?'page-item active':'page-item'">
+						<a class="page-link"
+						th:href="@{/product/list/cate(categoryID=${categorypage},size=${productPage.size},page=${1})}"
+						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+					</a>
+					</li>
+					<th:block th:if="${productPage.number>0}">
+						<li><a
+							th:href="@{/product/list/cate(categoryID=${categorypage}, size =${productPage.size}, page=${productPage.number})}"><i
+								class="fa fa-angle-left"></i></a></li>
+
+					</th:block>
+
+					<li class="page-item"><p>
+							<span th:utext="${productPage.number + 1}"></span>/<span
+								th:utext="${productPage.totalPages}"></span>
+						</p></li>
+
+
+					<th:block th:if="${productPage.number<productPage.totalPages-1}">
+						<li><a
+							th:href="@{/product/list/cate(categoryID=${categorypage}, size =${productPage.size}, page=${productPage.number+2})}"><i
+								class="fa fa-angle-right"></i></a></li>
+
+					</th:block>
+					<li
+						th:class="${productPage.totalPages==productPage.number+1}?'page-item active':'page-item'">
+						<a class="page-link"
+						th:href="@{/product/list/cate(categoryID=${categorypage},size=${productPage.size},page=${productPage.totalPages})}"
+						aria-label="Next"> <span>&raquo;</span>
+					</a>
+					</li>
+
+				</ul>
+			</nav>
+		</th:block>
+
+	</main>
+</body>
+</html>
